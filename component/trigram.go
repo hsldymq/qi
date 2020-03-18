@@ -46,14 +46,14 @@ func (t Trigram) Element() (Element, bool) {
 }
 
 // PalaceIndex 返回八卦对应宫位索引
-// 坎: 1宫
-// 坤: 2宫
-// 震: 3宫
-// 巽: 4宫
-// 乾: 6宫
-// 兌: 7宫
-// 艮: 8宫
-// 离: 9宫
+// 坎: 0(1宫)
+// 坤: 1(2宫)
+// 震: 2(3宫)
+// 巽: 3(4宫)
+// 乾: 5(6宫)
+// 兌: 6(7宫)
+// 艮: 7(8宫)
+// 离: 8(9宫)
 func (t Trigram) PalaceIndex() (int, bool) {
 	iMap := map[Trigram]int{
 		TrigramEnum.Kan:  0,
