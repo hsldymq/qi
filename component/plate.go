@@ -79,18 +79,21 @@ func (p Palace) FindPalaceIndex(value int) int {
 }
 
 // RotateValue 按圆盘方式旋转他们的值
-// 例, 在方盘上有如下值
-//		4 9 2
-//		3   7
-//		8 1 6
+// 例如,在圆盘上有如下值
+//		  4 9
+//	    3 	  2
+//		8     7
+//		  1 6
 //	如果RotateValue(1), 则顺时旋转1变为
-//		3 4 9
-//		8   2
-//		1 6 7
+//		  3 4
+//	    8 	  9
+//		1     2
+//		  6 7
 //	如果RotateValue(-1), 则逆时针旋转变为
-//		9 2 7
-//		4   6
-//		3 8 1
+//		  9 2
+//	    4 	  7
+//		3     6
+//		  8 1
 func (p Palace) RotateValue(by int) Palace {
 	original := [8]int{
 		p.First, p.Eighth, p.Third, p.Fourth,
