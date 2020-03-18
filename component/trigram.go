@@ -6,6 +6,14 @@ var trigramWords = [8]string{"坤", "艮", "坎", "巽", "震", "離", "兌", "�
 type Trigram int
 
 // NewTrigramFromPalaceIndex 从宫位索引创建八卦
+// 0(1宫): 坎
+// 1(2宫): 坤
+// 2(3宫): 震
+// 3(4宫): 巽
+// 5(6宫): 乾
+// 6(7宫): 兌
+// 7(8宫): 艮
+// 8(9宫): 离
 func NewTrigramFromPalaceIndex(idx int) (Trigram, bool) {
 	tMap := map[int]Trigram{
 		0: TrigramEnum.Kan,
@@ -15,7 +23,7 @@ func NewTrigramFromPalaceIndex(idx int) (Trigram, bool) {
 		5: TrigramEnum.Qian,
 		6: TrigramEnum.Dui,
 		7: TrigramEnum.Gen,
-		9: TrigramEnum.Li,
+		8: TrigramEnum.Li,
 	}
 	e, valid := tMap[idx]
 	return e, valid
@@ -38,6 +46,14 @@ func (t Trigram) Element() (Element, bool) {
 }
 
 // PalaceIndex 返回八卦对应宫位索引
+// 坎: 1宫
+// 坤: 2宫
+// 震: 3宫
+// 巽: 4宫
+// 乾: 6宫
+// 兌: 7宫
+// 艮: 8宫
+// 离: 9宫
 func (t Trigram) PalaceIndex() (int, bool) {
 	iMap := map[Trigram]int{
 		TrigramEnum.Kan:  0,
@@ -47,7 +63,7 @@ func (t Trigram) PalaceIndex() (int, bool) {
 		TrigramEnum.Qian: 5,
 		TrigramEnum.Dui:  6,
 		TrigramEnum.Gen:  7,
-		TrigramEnum.Li:   9,
+		TrigramEnum.Li:   8,
 	}
 	e, valid := iMap[t]
 	return e, valid
