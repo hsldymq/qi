@@ -34,6 +34,10 @@ func (pi PalaceIndex) OffsetBy(num int) PalaceIndex {
 	return i
 }
 
+func (pi PalaceIndex) IsValid() bool {
+	return pi >= 0 && pi < 9
+}
+
 // Palaces 用于保存9宫的值
 // 按照索引, 0代表1宫, 1代表2宫,一次类推
 type Palaces struct {
@@ -42,7 +46,7 @@ type Palaces struct {
 
 func NewPalace(values [9]int, startPalaceIndex PalaceIndex, asc bool) (Palaces, error) {
 	p := Palaces{}
-	if startPalaceIndex < 0 || startPalaceIndex > 8 {
+	if !startPalaceIndex.IsValid() {
 		return p, fmt.Errorf("invalid start index for creating palace")
 	}
 
@@ -61,8 +65,8 @@ func NewPalace(values [9]int, startPalaceIndex PalaceIndex, asc bool) (Palaces, 
 
 // Value 根据宫索引值获得其值
 // 0表示1宫, 1表示2宫, 以此类推
-func (p Palaces) Value(palaceIndex int) int {
-	if palaceIndex < 0 || palaceIndex >= 8 {
+func (p Palaces) Value(palaceIndex PalaceIndex) int {
+	if !palaceIndex.IsValid() {
 		return -1
 	}
 	return p.values[palaceIndex]
