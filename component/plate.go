@@ -34,6 +34,36 @@ func (pi PalaceIndex) OffsetBy(num int) PalaceIndex {
 	return i
 }
 
+// OriginalDoor 返回作为原始宫位所对应的门
+func (pi PalaceIndex) OriginalDoor() Door {
+	dMap := map[PalaceIndex]Door{
+		FirstPalace:   DoorEnum.Xiu,
+		SecondPalace:  DoorEnum.Si,
+		ThirdPalace:   DoorEnum.Shang,
+		FourthPalace:  DoorEnum.Du,
+		SixthPalace:   DoorEnum.Kai,
+		SeventhPalace: DoorEnum.Jing,
+		EighthPalace:  DoorEnum.Sheng,
+		NinthPalace:   DoorEnum.PJing,
+	}
+	return dMap[pi]
+}
+
+// OriginalDoor 返回作为原始宫位所对应的星
+func (pi PalaceIndex) OriginalStar() Star {
+	sMap := map[PalaceIndex]Star{
+		FirstPalace:   StarEnum.TianPeng,
+		SecondPalace:  StarEnum.TianRui,
+		ThirdPalace:   StarEnum.TianChong,
+		FourthPalace:  StarEnum.TianFu,
+		SixthPalace:   StarEnum.TianXin,
+		SeventhPalace: StarEnum.TianZhu,
+		EighthPalace:  StarEnum.TianRen,
+		NinthPalace:   StarEnum.TianYing,
+	}
+	return sMap[pi]
+}
+
 func (pi PalaceIndex) IsValid() bool {
 	return pi >= 0 && pi < 9
 }
@@ -74,13 +104,13 @@ func (p Palaces) Value(palaceIndex PalaceIndex) int {
 
 // FindPalaceIndex 根据值找到它所在的宫索引
 // 返回0代表1宫, 返回1代表2宫, 以此类推
-func (p Palaces) FindPalaceIndex(value int) int {
+func (p Palaces) FindPalaceIndex(value int) PalaceIndex {
 	for idx, v := range p.values {
 		if value == v {
-			return idx
+			return PalaceIndex(idx)
 		}
 	}
-	return -1
+	return PalaceIndex(-1)
 }
 
 // RotateValues 按圆盘方式旋转他们的值
