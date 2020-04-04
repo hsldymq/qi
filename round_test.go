@@ -7,7 +7,7 @@ import (
 )
 
 func TestMakeTerrestrialPlate(t *testing.T) {
-	p, err := makeBasePlate(component.ThirdPalace, component.YangEscaping)
+	p, err := makeQiYiPlate(component.ThirdPalace, component.YangEscaping)
 	if err != nil {
 		t.Fatalf("expect a yang escaping terrestrial plate, got error: %s", err)
 	}
@@ -24,7 +24,7 @@ func TestMakeTerrestrialPlate(t *testing.T) {
 		}
 	}
 
-	p, err = makeBasePlate(component.SeventhPalace, component.YinEscaping)
+	p, err = makeQiYiPlate(component.SeventhPalace, component.YinEscaping)
 	if err != nil {
 		t.Fatalf("expect a yin escaping terrestrial plate, got error: %s", err)
 	}
