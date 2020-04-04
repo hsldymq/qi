@@ -18,10 +18,65 @@ const (
 
 type PalaceIndex int
 
+func (pi PalaceIndex) RoundDistance(to PalaceIndex, clockwise bool) int {
+	if pi == to || !pi.IsValid() || !to.IsValid() {
+		return 0
+	}
+
+	p := pi
+	distance := 0
+	for ; p != to; distance++ {
+		p = p.RoundNext(clockwise)
+	}
+	return distance
+}
+
+// RoundNext 返回以旋转方式的下一宫的索引
+// clockwise == true以顺时针方式旋转
+// 0 -> 7, 7 -> 2, 2 -> 3, ..., 5 -> 0
+
+// clockwise == false以逆时针方向旋转
+// 0 -> 5, 5 -> 6, 6 -> 1, ..., 7 -> 0
+
+// 4 -> 4, 第五宫始终固定不变
+func (pi PalaceIndex) RoundNext(clockwise bool) PalaceIndex {
+	var pMap map[PalaceIndex]PalaceIndex
+	if clockwise {
+		pMap = map[PalaceIndex]PalaceIndex{
+			FirstPalace:   EighthPalace,
+			SecondPalace:  SeventhPalace,
+			ThirdPalace:   FourthPalace,
+			FourthPalace:  NinthPalace,
+			FifthPalace:   FifthPalace,
+			SixthPalace:   FirstPalace,
+			SeventhPalace: SixthPalace,
+			EighthPalace:  ThirdPalace,
+			NinthPalace:   SecondPalace,
+		}
+	} else {
+		pMap = map[PalaceIndex]PalaceIndex{
+			EighthPalace:  FirstPalace,
+			SeventhPalace: SecondPalace,
+			FourthPalace:  ThirdPalace,
+			NinthPalace:   FourthPalace,
+			FifthPalace:   FifthPalace,
+			FirstPalace:   SixthPalace,
+			SixthPalace:   SeventhPalace,
+			ThirdPalace:   EighthPalace,
+			SecondPalace:  NinthPalace,
+		}
+	}
+	return pMap[pi]
+}
+
+// Next 返回下一宫的索引号
+// 0 -> 1, 1 -> 2, ..., 8 -> 0
 func (pi PalaceIndex) Next() PalaceIndex {
 	return pi.OffsetBy(1)
 }
 
+// Next 返回上一宫的索引号
+// 8 -> 7, 7 -> 6, ..., 0 -> 8
 func (pi PalaceIndex) Prev() PalaceIndex {
 	return pi.OffsetBy(-1)
 }
