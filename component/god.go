@@ -32,7 +32,7 @@ func (g God) IsValid() bool {
 // 		勾陈(白虎) => 天英
 func (g God) Star() Star {
 	starMap := map[God]Star{
-		GodEnum.Zhifu:   StarEnum.TianPeng,
+		GodEnum.ZhiFu:   StarEnum.TianPeng,
 		GodEnum.ZhuQue:  StarEnum.TianRui,
 		GodEnum.XuanWu:  StarEnum.TianRui,
 		GodEnum.TaiYin:  StarEnum.TianChong,
@@ -48,7 +48,7 @@ func (g God) Star() Star {
 
 // GodEnum 八神枚举
 var GodEnum = struct {
-	Zhifu   God // 直符
+	ZhiFu   God // 直符
 	ZhuQue  God // 朱雀
 	XuanWu  God // 玄武
 	TaiYin  God // 太阴
@@ -59,7 +59,7 @@ var GodEnum = struct {
 	GouChen God // 勾陈
 	BaiHu   God // 白虎
 }{
-	Zhifu:   0,
+	ZhiFu:   0,
 	ZhuQue:  1,
 	XuanWu:  2,
 	TaiYin:  3,
