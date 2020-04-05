@@ -18,6 +18,10 @@ func (s Star) IsValid() bool {
 	return s >= 0 && s < 9
 }
 
+func (s Star) Value() int {
+	return int(s)
+}
+
 // String 返回九星所对应的8神
 // 阳遁对应关系:
 // 		直符 => 天蓬
@@ -39,7 +43,7 @@ func (s Star) IsValid() bool {
 // 		天英 => 白虎
 func (s Star) God(escaping Escaping) God {
 	yangEscapingMap := map[Star]God{
-		StarEnum.TianPeng:  GodEnum.Zhifu,
+		StarEnum.TianPeng:  GodEnum.ZhiFu,
 		StarEnum.TianRui:   GodEnum.ZhuQue,
 		StarEnum.TianChong: GodEnum.TaiYin,
 		StarEnum.TianFu:    GodEnum.LiuHe,
@@ -49,7 +53,7 @@ func (s Star) God(escaping Escaping) God {
 		StarEnum.TianYing:  GodEnum.GouChen,
 	}
 	YinEscapingMap := map[Star]God{
-		StarEnum.TianPeng:  GodEnum.Zhifu,
+		StarEnum.TianPeng:  GodEnum.ZhiFu,
 		StarEnum.TianRui:   GodEnum.XuanWu,
 		StarEnum.TianChong: GodEnum.TaiYin,
 		StarEnum.TianFu:    GodEnum.LiuHe,
