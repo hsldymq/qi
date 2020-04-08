@@ -48,7 +48,7 @@ func (g God) Star() Star {
 
 // GodEnum 八神枚举
 var GodEnum = struct {
-	ZhiFu   God // 直符
+	ZhiFu   God // 值符
 	ZhuQue  God // 朱雀
 	XuanWu  God // 玄武
 	TaiYin  God // 太阴
