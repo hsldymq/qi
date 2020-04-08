@@ -1,7 +1,7 @@
 package component
 
 // godWords 八神中文
-var godWords = [10]string{"值符", "朱雀", "玄武", "太阴", "六合", "九天", "九地", "腾蛇", "勾陈", "白虎"}
+var godWords = [10]string{"直符", "朱雀", "玄武", "太阴", "六合", "九天", "九地", "腾蛇", "勾陈", "白虎"}
 
 // God 八神
 // 阳遁八神: 直符, 朱雀, 太阴, 六合, 九天, 九地, 腾蛇, 勾陈
@@ -48,7 +48,7 @@ func (g God) Star() Star {
 
 // GodEnum 八神枚举
 var GodEnum = struct {
-	ZhiFu   God // 值符
+	ZhiFu   God // 直符
 	ZhuQue  God // 朱雀
 	XuanWu  God // 玄武
 	TaiYin  God // 太阴
