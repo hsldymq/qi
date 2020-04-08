@@ -24,14 +24,14 @@ func (m Door) String() string {
 
 // DoorEnum 门枚举
 var DoorEnum = struct {
-	Xiu   Door // 休
-	Si    Door // 死
-	Shang Door // 伤
-	Du    Door // 杜
-	Kai   Door // 开
-	Jing  Door // 惊
-	Sheng Door // 生
-	PJing Door // 景
+	Xiu   Door // 休门
+	Si    Door // 死门
+	Shang Door // 伤门
+	Du    Door // 杜门
+	Kai   Door // 开门
+	Jing  Door // 惊门
+	Sheng Door // 生门
+	PJing Door // 景门
 }{
 	Xiu:   0,
 	Si:    1,
