@@ -1,7 +1,7 @@
 package component
 
 // godWords 八神中文
-var godWords = [10]string{"直符", "朱雀", "玄武", "太阴", "六合", "九天", "九地", "腾蛇", "勾陈", "白虎"}
+var godWords = [10]string{"直符", "朱雀", "玄武", "太阴", "六合", "九天", "九地", "螣蛇", "勾陈", "白虎"}
 
 // God 八神
 // 阳遁八神: 直符, 朱雀, 太阴, 六合, 九天, 九地, 腾蛇, 勾陈
@@ -55,7 +55,7 @@ var GodEnum = struct {
 	LiuHe   God // 六合
 	JiuTian God // 九天
 	JiuDi   God // 九地
-	TengShe God // 腾蛇
+	TengShe God // 螣蛇
 	GouChen God // 勾陈
 	BaiHu   God // 白虎
 }{
