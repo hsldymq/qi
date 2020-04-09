@@ -8,6 +8,7 @@ import (
 	"github.com/hsldymq/qimen/component"
 )
 
+// solarTermPalaceIndex 每个节气坐落的宫索引,以及对应的上元局起宫索引
 var solarTermPalaceIndex = map[solar.SolarTerm][2]component.PalaceIndex{
 	solar.SolarTermEnum.TheWinterSolstice:     {component.FirstPalace, component.FirstPalace},     // 冬至1宫, 上元局起宫1宫
 	solar.SolarTermEnum.LesserCold:            {component.FirstPalace, component.SecondPalace},    // 小寒1宫, 上元局起宫2宫
