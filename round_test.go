@@ -1,7 +1,6 @@
 package qimen
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/hsldymq/go-chinese-calendar/sexagenary"
@@ -53,11 +52,74 @@ func TestGenerateRound(t *testing.T) {
 	cases := []RoundInfo{
 		{Escaping: component.YangEscaping, RoundPalaceIndex: component.FourthPalace, Yuan: component.YuanEnum.Lower, SexagenaryHour: sexagenary.SexagenaryTermEnum.WuZi},
 	}
+	expect := []Round{
+		{DutyStar: component.StarEnum.TianXin, DutyDoor: component.DoorEnum.Kai, QiYiTerrestrialPlate: component.NewPalaces([9]component.PalaceValue{3, 2, 1, 4, 5, 6, 7, 8, 9}), QiYiCelestialPlate: component.NewPalaces([9]component.PalaceValue{9, 8, 7, 6, 5, 4, 1, 2, 3}), StarCelestialPlate: component.NewPalaces([9]component.PalaceValue{8, 7, 6, 5, 4, 3, 2, 1, 0}), HumanPlate: component.NewPalaces([9]component.PalaceValue{4, 7, 6, 2, -1, 5, 1, 0, 3}), GodPlate: component.NewPalaces([9]component.PalaceValue{1, 3, 5, 0, -1, 8, 4, 6, 7})},
+	}
 	for idx, each := range cases {
-		result, err := GenerateRound(each)
+		actual, err := GenerateRound(each)
+		exp := expect[idx]
 		if err != nil {
 			t.Fatalf("error occurred during generating round(%d): %s", idx, err)
 		}
-		fmt.Printf("%+v", result)
+		if exp.DutyDoor != actual.DutyDoor {
+			t.Fatalf("%d: expect %s, got %s", idx, exp.DutyDoor, actual.DutyDoor)
+		}
+		if exp.DutyStar != actual.DutyStar {
+			t.Fatalf("case %d: expect %s, got %s", idx, exp.DutyStar, actual.DutyStar)
+		}
+		for i := 0; i < 9; i++ {
+			if i == 4 {
+				continue
+			}
+			expVal := exp.QiYiTerrestrialPlate.Value(component.PalaceIndex(i))
+			actVal := actual.QiYiTerrestrialPlate.Value(component.PalaceIndex(i))
+			if expVal != actVal {
+				t.Fatalf("case %d: terrestrial plate, palace %d, expect %s, got %s", idx, i+1, expVal.QiYi(), actVal.QiYi())
+			}
+		}
+
+		for i := 0; i < 9; i++ {
+			if i == 4 {
+				continue
+			}
+			expVal := exp.QiYiCelestialPlate.Value(component.PalaceIndex(i))
+			actVal := actual.QiYiCelestialPlate.Value(component.PalaceIndex(i))
+			if expVal != actVal {
+				t.Fatalf("case %d: qi yi celestial plate, palace %d, expect %s, got %s", idx, i+1, expVal.QiYi(), actVal.QiYi())
+			}
+		}
+
+		for i := 0; i < 9; i++ {
+			if i == 4 {
+				continue
+			}
+			expVal := exp.HumanPlate.Value(component.PalaceIndex(i))
+			actVal := actual.HumanPlate.Value(component.PalaceIndex(i))
+			if expVal != actVal {
+				t.Fatalf("case %d: human plate, palace %d, expect %s, got %s", idx, i+1, expVal.Door(), actVal.Door())
+			}
+		}
+
+		for i := 0; i < 9; i++ {
+			if i == 4 {
+				continue
+			}
+			expVal := exp.StarCelestialPlate.Value(component.PalaceIndex(i))
+			actVal := actual.StarCelestialPlate.Value(component.PalaceIndex(i))
+			if expVal != actVal {
+				t.Fatalf("case %d: star celestial plate, palace %d, expect %s, got %s", idx, i+1, expVal.Star(), actVal.Star())
+			}
+		}
+
+		for i := 0; i < 9; i++ {
+			if i == 4 {
+				continue
+			}
+			expVal := exp.GodPlate.Value(component.PalaceIndex(i))
+			actVal := actual.GodPlate.Value(component.PalaceIndex(i))
+			if expVal != actVal {
+				t.Fatalf("case %d: god plate, palace %d, expect %s, got %s", idx, i+1, expVal.God(), actVal.God())
+			}
+		}
 	}
 }
