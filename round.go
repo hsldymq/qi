@@ -152,22 +152,27 @@ func rotateHumanPlate(
 	hourLeaderPalaceIndex component.PalaceIndex,
 ) (component.Door, component.Palaces) {
 
-	endPalaceIndex := hourLeaderPalaceIndex
+	fromPalaceIndex := hourLeaderPalaceIndex
+	toPalaceIndex := hourLeaderPalaceIndex
 	// 八门按旬首到干支时, 根据阳遁或阴遁进行顺飞或逆飞
 	for st := hourLeader.SexagenaryTerm(); st.Index() != info.SexagenaryHour.Index(); st = st.Next() {
 		if info.Escaping == component.YangEscaping {
-			endPalaceIndex = endPalaceIndex.Next()
+			toPalaceIndex = toPalaceIndex.Next()
 		} else {
-			endPalaceIndex = endPalaceIndex.Prev()
+			toPalaceIndex = toPalaceIndex.Prev()
 		}
 	}
-	// TODO 如果飞入五宫怎么办?
-	if endPalaceIndex == component.FifthPalace {
-		// endPalaceIndex = component.SecondPalace
+
+	if fromPalaceIndex == component.FifthPalace {
+		fromPalaceIndex = component.SecondPalace
 	}
 
-	distance := hourLeaderPalaceIndex.RoundDistance(endPalaceIndex)
-	dutyDoor := hourLeaderPalaceIndex.OriginalDoor()
+	if toPalaceIndex == component.FifthPalace {
+		toPalaceIndex = component.SecondPalace
+	}
+
+	distance := fromPalaceIndex.RoundDistance(toPalaceIndex)
+	dutyDoor := fromPalaceIndex.OriginalDoor()
 	humanPlate := component.NewOriginalHumanPlate()
 
 	return dutyDoor, humanPlate.RotateValues(distance)
@@ -178,7 +183,11 @@ func rotateHumanPlate(
 // 原始神盘直符位于一宫
 func rotateGodPlate(dutyStar component.Star, starCelestialPlate component.Palaces, escaping component.Escaping) component.Palaces {
 	godPlate := component.NewOriginalGodPlate(escaping)
-	rotateTo := starCelestialPlate.FindPalaceIndex(dutyStar.Value())
+	ds := dutyStar
+	if ds == component.StarEnum.TianQin {
+		ds = component.StarEnum.TianRui
+	}
+	rotateTo := starCelestialPlate.FindPalaceIndex(ds.Value())
 
 	return godPlate.RotateValues(component.FirstPalace.RoundDistance(rotateTo))
 }
