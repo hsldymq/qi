@@ -7,6 +7,10 @@ import (
 // Escaping 遁
 type Escaping int
 
+func (e Escaping) IsValid() bool {
+	return e == YangEscaping || e == YinEscaping
+}
+
 // 阳遁阴遁
 const (
 	YangEscaping Escaping = 0
