@@ -131,6 +131,10 @@ type Palaces struct {
 	values [9]PalaceValue
 }
 
+func NewPalaces(values [9]PalaceValue) Palaces {
+	return Palaces{values: values}
+}
+
 func NewQiYiPlate(roundPalaceIndex PalaceIndex, escaping Escaping) (Palaces, error) {
 	p := Palaces{}
 	if !roundPalaceIndex.IsValid() {
