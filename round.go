@@ -35,48 +35,6 @@ var solarTermPalaceIndex = map[solar.SolarTerm][2]component.PalaceIndex{
 	solar.SolarTermEnum.GreaterSnow:           {component.SixthPalace, component.FourthPalace},    // 大雪6宫, 上元局起宫4宫
 }
 
-// RoundTime 定局用时: 干支年月日时, 节气, 元
-type RoundTime struct {
-	Year      sexagenary.SexagenaryTerm
-	Month     sexagenary.SexagenaryTerm
-	Day       sexagenary.SexagenaryTerm
-	Hour      sexagenary.SexagenaryTerm
-	SolarTerm solar.SolarTerm
-	Pentad    solar.Pentad
-}
-
-// Validate 验证时间是否有效
-func (rt RoundTime) Validate() error {
-	if !rt.SolarTerm.IsValid() {
-		return fmt.Errorf("invalid solar solarTerm %d", rt.SolarTerm)
-	}
-	if !rt.Pentad.IsValid() {
-		return fmt.Errorf("invalid pentad %d", rt.Pentad)
-	}
-	if !rt.Year.IsValid() {
-		return fmt.Errorf("invalid sexagenary year %d:%d", rt.Year.CelestialStem, rt.Year.TerrestrialBranch)
-	}
-	if !rt.Month.IsValid() {
-		return fmt.Errorf("invalid sexagenary month %d:%d", rt.Month.CelestialStem, rt.Month.TerrestrialBranch)
-	}
-	if !rt.Day.IsValid() {
-		return fmt.Errorf("invalid sexagenary day %d:%d", rt.Day.CelestialStem, rt.Day.TerrestrialBranch)
-	}
-	if !rt.Hour.IsValid() {
-		return fmt.Errorf("invalid sexagenary hour %d:%d", rt.Hour.CelestialStem, rt.Hour.TerrestrialBranch)
-	}
-
-	return nil
-}
-
-// roundInfo 定局相关信息
-type roundInfo struct {
-	component.LeadingHour                       // 旬首
-	component.Escaping                          // 阳/阴遁
-	SolarTermPalaceIndex  component.PalaceIndex // 节气所在宫索引
-	RoundPalaceIndex      component.PalaceIndex // 此局所在宫索引
-}
-
 // Round 局
 type Round struct {
 	DutyStar             component.Star    // 值符
@@ -88,34 +46,61 @@ type Round struct {
 	GodPlate             component.Palaces // 神盘
 }
 
-func GenerateRound(roundTime RoundTime) (Round, error) {
-	if err := roundTime.Validate(); err != nil {
+// RoundInfo 起局需要的相关信息
+type RoundInfo struct {
+	Escaping         component.Escaping        // 阳/阴遁
+	RoundPalaceIndex component.PalaceIndex     // 此局所在宫索引
+	Yuan             component.Yuan            // 上/中/下元
+	SexagenaryHour   sexagenary.SexagenaryTerm // 干支时辰
+}
+
+func (ri RoundInfo) Validate() error {
+	if ri.Yuan.IsValid() {
+		return fmt.Errorf("invalid yuan: %d", ri.Yuan)
+	}
+	if ri.RoundPalaceIndex.IsValid() {
+		return fmt.Errorf("invalid round palace index: %d", ri.RoundPalaceIndex)
+	}
+	if ri.SexagenaryHour.IsValid() {
+		return fmt.Errorf("invalid sexagenary hour: %d", ri.SexagenaryHour.Index())
+	}
+	if ri.Escaping.IsValid() {
+		return fmt.Errorf("invalid escaping: %d", ri.Escaping)
+	}
+
+	return nil
+}
+
+func GenerateRound(roundInfo RoundInfo) (Round, error) {
+	if err := roundInfo.Validate(); err != nil {
 		return Round{}, err
 	}
 
-	info := infoFromRoundTime(roundTime)
+	// 旬首
+	hourLeader := component.NewHourLeader(roundInfo.SexagenaryHour)
 
 	// 天盘三奇六仪
-	qiYiCelestialPlate, err := component.NewQiYiPlate(info.RoundPalaceIndex, info.Escaping)
+	qiYiCelestialPlate, err := component.NewQiYiPlate(roundInfo.RoundPalaceIndex, roundInfo.Escaping)
 	if err != nil {
 		return Round{}, err
 	}
 
 	// 地盘三奇六仪
-	qiYiTerrestrialPlate, err := component.NewQiYiPlate(info.RoundPalaceIndex, info.Escaping)
+	qiYiTerrestrialPlate, err := component.NewQiYiPlate(roundInfo.RoundPalaceIndex, roundInfo.Escaping)
 	if err != nil {
 		return Round{}, err
 	}
+
 	// 旬首所在的宫位索引
-	leadingHourPalaceIndex := qiYiCelestialPlate.FindPalaceIndex(info.LeadingHour.SixYi().Value())
+	hourLeaderPalaceIndex := qiYiCelestialPlate.FindPalaceIndex(hourLeader.SixYi().Value())
 
 	// 获得值符(值星), 旋转后的天盘三奇六仪, 旋转后的天盘九星
-	dutyStar, qiYiCelestialPlate, starCelestialPlate := rotateStarCelestialPlate(leadingHourPalaceIndex, roundTime.Hour, qiYiCelestialPlate)
+	dutyStar, qiYiCelestialPlate, starCelestialPlate := rotateStarCelestialPlate(hourLeaderPalaceIndex, roundInfo.SexagenaryHour, qiYiCelestialPlate)
 
 	// 获得值使(值门), 旋转后的人盘
-	dutyDoor, humanPlate := rotateHumanPlate(roundTime, info, leadingHourPalaceIndex)
+	dutyDoor, humanPlate := rotateHumanPlate(roundInfo, hourLeader, hourLeaderPalaceIndex)
 
-	godPlate := rotateGodPlate(dutyStar, starCelestialPlate, info.Escaping)
+	godPlate := rotateGodPlate(dutyStar, starCelestialPlate, roundInfo.Escaping)
 
 	return Round{
 		DutyStar:             dutyStar,
@@ -128,33 +113,21 @@ func GenerateRound(roundTime RoundTime) (Round, error) {
 	}, nil
 }
 
-func infoFromRoundTime(roundTime RoundTime) roundInfo {
-	palaceIndexes := solarTermPalaceIndex[roundTime.SolarTerm]
-	solarTermPalaceIndex, roundPalaceIndex := palaceIndexes[0], palaceIndexes[1].OffsetBy(int(roundTime.Pentad)*6)
-
-	return roundInfo{
-		LeadingHour:          component.LeadingHourOfSexagenary(roundTime.Hour),
-		Escaping:             component.SolarTermEscaping(roundTime.SolarTerm),
-		SolarTermPalaceIndex: solarTermPalaceIndex,
-		RoundPalaceIndex:     roundPalaceIndex,
-	}
-}
-
 // rotateStarCelestialPlate 转动九星天盘
 func rotateStarCelestialPlate(
-	leadingHourPalaceIndex component.PalaceIndex,
+	hourLeaderPalaceIndex component.PalaceIndex,
 	hour sexagenary.SexagenaryTerm,
 	qiYiCelestialPlate component.Palaces,
 ) (component.Star, component.Palaces, component.Palaces) {
 
 	// 从旬首所在宫位要转到的目标宫位
-	rotatedCelestialPalaceIndex := leadingHourPalaceIndex
+	rotatedCelestialPalaceIndex := hourLeaderPalaceIndex
 	if hour.CelestialStem != sexagenary.CelestialStemEnum.Jia {
 		rotatedCelestialPalaceIndex = qiYiCelestialPlate.FindPalaceIndex(component.QiYi(hour.CelestialStem).Value())
 	}
-	fmt.Println(leadingHourPalaceIndex)
+	fmt.Println(hourLeaderPalaceIndex)
 	// 指定实际的天盘旋转宫位, 由于五宫寄于二宫, 所以这里需要进行调整
-	from := leadingHourPalaceIndex
+	from := hourLeaderPalaceIndex
 	if from == component.FifthPalace {
 		from = component.SecondPalace
 	}
@@ -167,21 +140,21 @@ func rotateStarCelestialPlate(
 	starCelestialPlate := component.NewOriginStarPlate()
 	rotatedQiYiCelestialPlate := qiYiCelestialPlate.RotateValues(rotatedDistance)
 	rotatedStarCelestialPlate := starCelestialPlate.RotateValues(rotatedDistance)
-	dutyStar := leadingHourPalaceIndex.OriginalStar()
+	dutyStar := hourLeaderPalaceIndex.OriginalStar()
 
 	return dutyStar, rotatedQiYiCelestialPlate, rotatedStarCelestialPlate
 }
 
 // rotateHumanPlate 转动人盘
 func rotateHumanPlate(
-	roundTime RoundTime,
-	info roundInfo,
-	leadingHourPalaceIndex component.PalaceIndex,
+	info RoundInfo,
+	hourLeader component.HourLeader,
+	hourLeaderPalaceIndex component.PalaceIndex,
 ) (component.Door, component.Palaces) {
 
-	endPalaceIndex := leadingHourPalaceIndex
+	endPalaceIndex := hourLeaderPalaceIndex
 	// 八门按旬首到干支时, 根据阳遁或阴遁进行顺飞或逆飞
-	for st := info.LeadingHour.SexagenaryTerm(); st.Index() != roundTime.Hour.Index(); st = st.Next() {
+	for st := hourLeader.SexagenaryTerm(); st.Index() != info.SexagenaryHour.Index(); st = st.Next() {
 		if info.Escaping == component.YangEscaping {
 			endPalaceIndex = endPalaceIndex.Next()
 		} else {
@@ -193,8 +166,8 @@ func rotateHumanPlate(
 		// endPalaceIndex = component.SecondPalace
 	}
 
-	distance := leadingHourPalaceIndex.RoundDistance(endPalaceIndex)
-	dutyDoor := leadingHourPalaceIndex.OriginalDoor()
+	distance := hourLeaderPalaceIndex.RoundDistance(endPalaceIndex)
+	dutyDoor := hourLeaderPalaceIndex.OriginalDoor()
 	humanPlate := component.NewOriginalHumanPlate()
 
 	return dutyDoor, humanPlate.RotateValues(distance)

@@ -11,12 +11,8 @@ import (
 func TestRotateStarCelestialPlate(t *testing.T) {
 	qiYiPlate, _ := component.NewQiYiPlate(component.ThirdPalace, component.YangEscaping)
 	hour := sexagenary.SexagenaryTermEnum.GengWu
-	info := roundInfo{
-		LeadingHour:      component.LeadingHourOfSexagenary(hour),
-		Escaping:         component.YangEscaping,
-		RoundPalaceIndex: component.ThirdPalace,
-	}
-	leadingHourPalaceIndex := qiYiPlate.FindPalaceIndex(info.LeadingHour.SixYi().Value())
+	hourLeader := component.NewHourLeader(hour)
+	leadingHourPalaceIndex := qiYiPlate.FindPalaceIndex(hourLeader.SixYi().Value())
 
 	dutyStar, qiYiCelestialPlate, starCelestialPlate := rotateStarCelestialPlate(leadingHourPalaceIndex, hour, qiYiPlate)
 	if dutyStar != component.StarEnum.TianChong {
