@@ -1,6 +1,7 @@
 package qimen
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hsldymq/go-chinese-calendar/sexagenary"
@@ -45,5 +46,18 @@ func TestRotateStarCelestialPlate(t *testing.T) {
 			t.Fatalf("star celestial plate, palace index %d, expect %s, got %s", i, expect[i].Star().String(), actual.Star().String())
 		}
 		pIndex = pIndex.Next()
+	}
+}
+
+func TestGenerateRound(t *testing.T) {
+	cases := []RoundInfo{
+		{Escaping: component.YangEscaping, RoundPalaceIndex: component.FourthPalace, Yuan: component.YuanEnum.Lower, SexagenaryHour: sexagenary.SexagenaryTermEnum.WuZi},
+	}
+	for idx, each := range cases {
+		result, err := GenerateRound(each)
+		if err != nil {
+			t.Fatalf("error occurred during generating round(%d): %s", idx, err)
+		}
+		fmt.Printf("%+v", result)
 	}
 }

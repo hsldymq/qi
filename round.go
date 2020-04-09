@@ -56,16 +56,16 @@ type RoundInfo struct {
 }
 
 func (ri RoundInfo) Validate() error {
-	if ri.Yuan.IsValid() {
+	if !ri.Yuan.IsValid() {
 		return fmt.Errorf("invalid yuan: %d", ri.Yuan)
 	}
-	if ri.RoundPalaceIndex.IsValid() {
+	if !ri.RoundPalaceIndex.IsValid() {
 		return fmt.Errorf("invalid round palace index: %d", ri.RoundPalaceIndex)
 	}
-	if ri.SexagenaryHour.IsValid() {
+	if !ri.SexagenaryHour.IsValid() {
 		return fmt.Errorf("invalid sexagenary hour: %d", ri.SexagenaryHour.Index())
 	}
-	if ri.Escaping.IsValid() {
+	if !ri.Escaping.IsValid() {
 		return fmt.Errorf("invalid escaping: %d", ri.Escaping)
 	}
 
@@ -126,7 +126,6 @@ func rotateStarCelestialPlate(
 	if hour.CelestialStem != sexagenary.CelestialStemEnum.Jia {
 		rotatedCelestialPalaceIndex = qiYiCelestialPlate.FindPalaceIndex(component.QiYi(hour.CelestialStem).Value())
 	}
-	fmt.Println(hourLeaderPalaceIndex)
 	// 指定实际的天盘旋转宫位, 由于五宫寄于二宫, 所以这里需要进行调整
 	from := hourLeaderPalaceIndex
 	if from == component.FifthPalace {
