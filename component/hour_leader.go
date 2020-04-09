@@ -4,17 +4,17 @@ import (
 	"github.com/hsldymq/go-chinese-calendar/sexagenary"
 )
 
-// LeadingHour 旬首
-type LeadingHour int
+// HourLeader 旬首
+type HourLeader int
 
-// LeadingHourOfSexagenary 根据干支创建对应的旬首
-func LeadingHourOfSexagenary(term sexagenary.SexagenaryTerm) LeadingHour {
-	return LeadingHour(term.Index() / 10)
+// NewHourLeader 根据干支时创建对应的旬首
+func NewHourLeader(term sexagenary.SexagenaryTerm) HourLeader {
+	return HourLeader(term.Index() / 10)
 }
 
 // SixYi 返回旬首对应的六仪
-func (lh LeadingHour) SixYi() QiYi {
-	yMap := map[LeadingHour]QiYi{
+func (lh HourLeader) SixYi() QiYi {
+	yMap := map[HourLeader]QiYi{
 		LeadingHourEnum.JiaZi:   QiYiEnum.Wu,
 		LeadingHourEnum.JiaXu:   QiYiEnum.Ji,
 		LeadingHourEnum.JiaShen: QiYiEnum.Geng,
@@ -26,8 +26,8 @@ func (lh LeadingHour) SixYi() QiYi {
 	return yMap[lh]
 }
 
-func (lh LeadingHour) SexagenaryTerm() sexagenary.SexagenaryTerm {
-	sMap := map[LeadingHour]sexagenary.SexagenaryTerm{
+func (lh HourLeader) SexagenaryTerm() sexagenary.SexagenaryTerm {
+	sMap := map[HourLeader]sexagenary.SexagenaryTerm{
 		LeadingHourEnum.JiaZi:   sexagenary.SexagenaryTermEnum.JiaZi,
 		LeadingHourEnum.JiaXu:   sexagenary.SexagenaryTermEnum.JiaXu,
 		LeadingHourEnum.JiaShen: sexagenary.SexagenaryTermEnum.JiaShen,
@@ -39,17 +39,17 @@ func (lh LeadingHour) SexagenaryTerm() sexagenary.SexagenaryTerm {
 	return sMap[lh]
 }
 
-func (lh LeadingHour) IsValid() bool {
+func (lh HourLeader) IsValid() bool {
 	return lh >= 0 && lh < 6
 }
 
 var LeadingHourEnum = struct {
-	JiaZi   LeadingHour
-	JiaXu   LeadingHour
-	JiaShen LeadingHour
-	JiaWu   LeadingHour
-	JiaChen LeadingHour
-	JiaYin  LeadingHour
+	JiaZi   HourLeader
+	JiaXu   HourLeader
+	JiaShen HourLeader
+	JiaWu   HourLeader
+	JiaChen HourLeader
+	JiaYin  HourLeader
 }{
 	JiaZi:   0,
 	JiaXu:   1,

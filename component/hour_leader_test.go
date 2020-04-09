@@ -15,7 +15,7 @@ func TestNewLeadingHour(t *testing.T) {
 		{"甲辰", "乙巳", "丙午", "丁未", "戊申", "己酉", "庚戌", "辛亥", "壬子", "癸丑"},
 		{"甲寅", "乙卯", "丙辰", "丁巳", "戊午", "己未", "庚申", "辛酉", "壬戌", "癸亥"},
 	}
-	expect := [6]LeadingHour{
+	expect := [6]HourLeader{
 		LeadingHourEnum.JiaZi,
 		LeadingHourEnum.JiaXu,
 		LeadingHourEnum.JiaShen,
@@ -30,7 +30,7 @@ func TestNewLeadingHour(t *testing.T) {
 				t.Fatalf("failed to new sexagenary from %s", each)
 			}
 
-			lh := LeadingHourOfSexagenary(s)
+			lh := NewHourLeader(s)
 			if lh != expect[idx] {
 				t.Fatalf("leading hour of %s should be %d, got %d", each, expect[idx], lh)
 			}
