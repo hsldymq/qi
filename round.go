@@ -187,7 +187,9 @@ func rotateGodPlate(dutyStar component.Star, starCelestialPlate component.Palace
 	if ds == component.StarEnum.TianQin {
 		ds = component.StarEnum.TianRui
 	}
+
+	from := godPlate.FindPalaceIndex(int(component.GodEnum.ZhiFu))
 	rotateTo := starCelestialPlate.FindPalaceIndex(ds.Value())
 
-	return godPlate.RotateValues(component.FirstPalace.RoundDistance(rotateTo))
+	return godPlate.RotateValues(from.RoundDistance(rotateTo))
 }
