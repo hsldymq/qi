@@ -4,7 +4,7 @@ package component
 //		休门, 死门, 伤门, 杜门, 开门, 惊门, 生门, 景门
 
 // doorWords 门中文
-var doorWords = [9]string{"休", "死", "伤", "杜", "开", "惊", "生", "景"}
+var doorWords = [9]string{"休门", "死门", "伤门", "杜门", "开门", "惊门", "生门", "景门"}
 
 // Door 门
 type Door int
