@@ -7,6 +7,17 @@ import (
 // Escaping 遁
 type Escaping int
 
+func (e Escaping) String() string {
+	if !e.IsValid() {
+		return ""
+	}
+
+	return map[Escaping]string{
+		YangEscaping: "阳遁",
+		YinEscaping:  "阴遁",
+	}[e]
+}
+
 func (e Escaping) IsValid() bool {
 	return e == YangEscaping || e == YinEscaping
 }

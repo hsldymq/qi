@@ -215,6 +215,10 @@ func NewOriginStarPlate() Palaces {
 	}
 }
 
+func (p Palaces) Iter() [9]PalaceValue {
+	return p.values
+}
+
 // Value 根据宫索引值获得其值
 // 0表示1宫, 1表示2宫, 以此类推
 func (p Palaces) Value(palaceIndex PalaceIndex) PalaceValue {
