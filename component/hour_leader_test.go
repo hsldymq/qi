@@ -16,12 +16,12 @@ func TestNewLeadingHour(t *testing.T) {
 		{"甲寅", "乙卯", "丙辰", "丁巳", "戊午", "己未", "庚申", "辛酉", "壬戌", "癸亥"},
 	}
 	expect := [6]HourLeader{
-		LeadingHourEnum.JiaZi,
-		LeadingHourEnum.JiaXu,
-		LeadingHourEnum.JiaShen,
-		LeadingHourEnum.JiaWu,
-		LeadingHourEnum.JiaChen,
-		LeadingHourEnum.JiaYin,
+		HourLeaderEnum.JiaZi,
+		HourLeaderEnum.JiaXu,
+		HourLeaderEnum.JiaShen,
+		HourLeaderEnum.JiaWu,
+		HourLeaderEnum.JiaChen,
+		HourLeaderEnum.JiaYin,
 	}
 	for idx, hours := range cases {
 		for _, each := range hours {
