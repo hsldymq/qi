@@ -86,9 +86,10 @@ func NewRoundParams(term solar.SolarTerm, dayNo int, sexagenaryHour sexagenary.S
 	}
 	roundPalaceIndex := palaceIndexes[1].OffsetBy(yuan * 6)
 	return RoundParams{
-		Escaping:         component.SolarTermEscaping(term),
-		RoundPalaceIndex: roundPalaceIndex,
-		SexagenaryHour:   sexagenaryHour,
+		Escaping:             component.SolarTermEscaping(term),
+		SolarTermPalaceIndex: palaceIndexes[0],
+		RoundPalaceIndex:     roundPalaceIndex,
+		SexagenaryHour:       sexagenaryHour,
 	}, nil
 }
 
