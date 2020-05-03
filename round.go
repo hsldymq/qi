@@ -96,7 +96,7 @@ func NewRoundParams(term solar.SolarTerm, dayNo int, sexagenaryHour sexagenary.S
 	}, nil
 }
 
-// GenerateRoundV1 起局
+// GenerateRoundV1 V1版起局
 func GenerateRoundV1(roundParams RoundParams) (Round, error) {
 	if err := roundParams.Validate(); err != nil {
 		return Round{}, err
@@ -138,6 +138,8 @@ func GenerateRoundV1(roundParams RoundParams) (Round, error) {
 	}, nil
 }
 
+// GenerateRoundV2 V2版起局
+// 它跟V1的算法区别在于,V2中的寄生于节气所在宫,V1中的寄生于2宫
 func GenerateRoundV2(roundParams RoundParams) (Round, error) {
 	if err := roundParams.Validate(); err != nil {
 		return Round{}, err
