@@ -71,6 +71,9 @@ func (ri RoundParams) Validate() error {
 }
 
 // NewRoundParams 创建起局参数
+// term: 节气
+// dayNo: 该节气的第几日(从1计数)
+// sexagenaryHour: 干支时
 func NewRoundParams(term solar.SolarTerm, dayNo int, sexagenaryHour sexagenary.SexagenaryTerm) (RoundParams, error) {
 	palaceIndexes, ok := solarTermPalaceIndex[term]
 	if !ok {
